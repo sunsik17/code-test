@@ -15,6 +15,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping
+/*
+- 문제 : 각 api 엔드포인트 url이 불규칙적입니다.(가독성)
+- 원인 :
+  - /get/product (동사 포함)
+  - /create/product (동사 포함)
+  - /product/list (동사 미포함)
+  - /product/category/list (동사 미포함)
+- 개선안(대안) :
+@RequestMapping("/products") 로 베이스 경로를 통일 하고
+@GetMapping("/{productId}")과 같이 http메소드로 행동을 표현하도록 url을 수정.
+
+- 선택 근거:
+RESTful 컨벤션 준수로 API 직관성이 좋아집니다.
+리소스 중심 URL을 설계 할 수 있습니다.
+HTTP 메서드로 액션을 구분할 수 있습니다.
+ */
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
