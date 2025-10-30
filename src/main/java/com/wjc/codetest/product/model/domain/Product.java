@@ -7,9 +7,9 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-/* 문제 : entity class에 setter를 사용하고 있어 의도를 파악하기 어렵습니다.
-   원인 : product 수정을 실행 할 때 setter를 사용하고 있습니다.
-   개선안(대안) :
+/* - 문제 : entity class에 setter를 사용하고 있어 의도를 파악하기 어렵습니다.
+   - 원인 : product 수정을 실행 할 때 setter를 사용하고 있습니다.
+   - 개선안(대안) :
    public void modifyCategory(String category) {
      this.category = category;
    }
@@ -49,4 +49,11 @@ public class Product {
     public String getName() {
         return name;
     }
+    /*
+    - 문제 : 메서드 중복
+    - 원인 : entity class에 @Getter가 존재 하지만, 같은 기능을 하는 getCategory, getName 메소드가 중복으로 있습니다.
+    - 개선안(대안) : get method 삭제
+    - 선택 근거 :
+    이름과 의미가 완전히 똑같은 메서드를 삭제함으로써 가독성이 좋아집니다.
+     */
 }
