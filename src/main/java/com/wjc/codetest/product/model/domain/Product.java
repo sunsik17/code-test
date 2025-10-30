@@ -7,18 +7,19 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-/* entity class에 setter를 사용하면 의도를 파악하기 어렵습니다.
-   필요할 때 사용하는 비즈니스 메소드를 만들어 사용하는 것이 좋은 방법 같습니다.
- *
- * public void setCategory(String category) {
- *   this.category = category;
- * } x
- *
- * public void modifyCategory(String category) {
- *   this.category = category;
- * } o
- *
- * 처럼 명확한 사용처를 알 수 있도록 하는 것이 좋을 것 같습니다.
+/* 문제 : entity class에 setter를 사용하고 있어 의도를 파악하기 어렵습니다.
+   원인 : product 수정을 실행 할 때 setter를 사용하고 있습니다.
+   개선안(대안) :
+   public void modifyCategory(String category) {
+     this.category = category;
+   }
+   public void modifyName(String name) {
+     this.name = name;
+   }
+   으로 수정되어야 하고, category, name 등 수정하는 파라미터 검증 메소드도 추가하면 좋을것 같습니다.(null 체크, 글자 수 제한 등)
+
+   - 선택 근거 :
+   메서드 이름으로 의도를 표현할 수 있습니다.
  */
 public class Product {
 
