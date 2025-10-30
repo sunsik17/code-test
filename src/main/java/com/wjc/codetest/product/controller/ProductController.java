@@ -63,11 +63,13 @@ public class ProductController {
     - 문제 : http 메소드를 잘못 사용하고 있습니다.
     - 원인 : delete, update 작업에 PostMapping을 사용하고 있습니다. post 메소드는 비멱등 메소드로 새로운 리소스를 생성할 때 사용합니다.
     - 개선안(대안) :
-    데이터를 삭제할 때는 @DeleteMapping,
-    수정이 필요할 때는 @PutMapping을 사용 하도록 합니다.
+    조회 할 때 @GetMapping,
+    리소스를 생성 할 때 @PostMapping,
+    리소스를 삭제할 때 @DeleteMapping,
+    수정이 필요할 때 @PutMapping을 사용 합니다.
     - 선택 근거 :
     적절한 http 메소드를 사용해 api 의도가 명확해집니다.
-    또 멱등한 연산을 할 경우 put을 사용하는 것이 의미적으로 적절하다고 생각합니다.
+    또 업데이트 기능과 같이 멱등한 연산을 할 경우 post 보다 put을 사용하는 것이 의미적으로 적절하다고 생각합니다.
      */
     @PostMapping(value = "/product/list")
     public ResponseEntity<ProductListResponse> getProductListByCategory(@RequestBody GetProductListRequest dto){
