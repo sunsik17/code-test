@@ -82,4 +82,13 @@ public class ProductController {
         List<String> uniqueCategories = productService.getUniqueCategories();
         return ResponseEntity.ok(uniqueCategories);
     }
+    /*
+    - 문제 : 메서드에서 불필요한 변수를 사용해 코드 퀄리티 저하
+    - 원인 : 불필요한 중간 저장
+    - 개선안 :
+    단순 반환 시 return ResponseEntity.ok(service.method()) 형식으로 사용 하되,
+    후처리 필요 시 변수에 담아 사용하면 좋을 것 같습니다.
+    - 선택 근거 :
+    현재는 후처리 없이 사용하지 않는 변수에 담아져 있기 때문에 즉시 반환 하는 방법을 사용하는 것이 더 깔끔하다고 생각합니다.
+     */
 }
