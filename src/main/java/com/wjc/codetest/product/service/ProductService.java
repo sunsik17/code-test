@@ -33,6 +33,16 @@ public class ProductService {
         }
         return productOptional.get();
     }
+    /*
+    - 문제 : Optional사용 방식
+    - 원인 : isPresent() 이후 get() 사용
+    - 개선안 :
+    return productRepository.findById(productId).orElseThrow(
+      () -> new RuntimeException("product not found");
+    );
+    - 선택 근거 :
+    null check와 exception을 한줄로 표현할 수 있어 간결하고 명확합니다.
+     */
 
     public Product update(UpdateProductRequest dto) {
         Product product = getProductById(dto.getId());
@@ -42,7 +52,14 @@ public class ProductService {
         return updatedProduct;
 
     }
-
+    /*
+        - 문제 : 공백
+        - 원인 : return updateProduct; 아래 의미 없는 줄바꿈
+        - 개선안 : 삭제
+        - 선택 근거 :
+        팀단위 프로젝트라면 팀 코드 컨벤션이 있을 것이고 해당 컨벤션을 지켜주어야 합니다.
+        필요 없는 공백을 없애고 코드 컨벤션을 지키려는 습관을 들여야 합니다.
+*/
     public void deleteById(Long productId) {
         Product product = getProductById(productId);
         productRepository.delete(product);
