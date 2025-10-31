@@ -53,13 +53,13 @@ public class ProductService {
 
     }
     /*
-        - 문제 : 공백
-        - 원인 : return updateProduct; 아래 의미 없는 줄바꿈
-        - 개선안 : 삭제
-        - 선택 근거 :
-        팀단위 프로젝트라면 팀 코드 컨벤션이 있을 것이고 해당 컨벤션을 지켜주어야 합니다.
-        필요 없는 공백을 없애고 코드 컨벤션을 지키려는 습관을 들여야 합니다.
-*/
+    - 문제 : 공백
+    - 원인 : return updateProduct; 아래 의미 없는 줄바꿈
+    - 개선안 : 삭제
+    - 선택 근거 :
+    팀단위 프로젝트라면 팀 코드 컨벤션이 있을 것이고 해당 컨벤션을 지켜주어야 합니다.
+    필요 없는 공백을 없애고 코드 컨벤션을 지키려는 습관을 들여야 합니다.
+    */
     public void deleteById(Long productId) {
         Product product = getProductById(productId);
         productRepository.delete(product);
