@@ -76,6 +76,18 @@ public class ProductController {
         Page<Product> productList = productService.getListByCategory(dto);
         return ResponseEntity.ok(new ProductListResponse(productList.getContent(), productList.getTotalPages(), productList.getTotalElements(), productList.getNumber()));
     }
+    /*
+    - 문제 : http 메소드를 잘못 사용하고 있으며 코드 한줄의 길이가 너무 긴듯 합니다.
+    - 원인 : 조회 목적 api 입니다만 post 메소드 요청을 받고 있고, 화면을 벗어날 만큼 코드 길이가 깁니다.
+    - 개선안 :
+    @GetMapping
+    public ResponseEntity<ProductListResponse> getProductListByCategory(
+        @RequestParam(value = "page") int page,
+        @RequestParam(value = "size") int size,
+        @RequestParam(value = "sort") String sort ) {
+        Page<Product> productList = productService.getListByCategory(dto);
+        return ResponseEntity.ok(new ProductListResponse(productList.getContent(), productList.getTotalPages(), productList.getTotalElements(), productList.getNumber()));
+     */
 
     @GetMapping(value = "/product/category/list")
     public ResponseEntity<List<String>> getProductListByCategory(){
