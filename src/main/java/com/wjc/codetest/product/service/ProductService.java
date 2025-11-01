@@ -30,6 +30,7 @@ public class ProductService {
         Optional<Product> productOptional = productRepository.findById(productId);
         if (!productOptional.isPresent()) {
             throw new RuntimeException("product not found");
+            // globalExceptionHandler 에서 리뷰
         }
         return productOptional.get();
     }
