@@ -75,10 +75,12 @@ public class ProductService {
     -원인 : findAllByCategory()는 이미 특정 카테고리의 상품들을 찾아 내지만 category로 정렬하는 효과 없는 정렬쿼리 발생
     -개선안 :
     pageRequest 객체를 생성할 때 Sort.by를 삭제하거나
-    클라이언트가 선택한 기준에 맞게 정렬해야 합니다.
+    서비스가 아닌 클라이언트가 선택한 기준에 맞게 정렬할 수 있도록 해당 코드를 사용하는 controller에 request param으로 기준을 추가해
+    Pageable 객체를 전달 받습니다.
     -선택근거 :
     개발자가 직접 코드로 category를 이용한 정렬을 진행하기 때문에
     의미 없는 정렬 쿼리 ORDER BY 줄이 사라지거나 의미있게 정렬 할 수 있도록 바뀌게 됩니다.
+    또, 해당 서비스 코드는 핵심 로직만을 담당할 수 있어 단위테스트에 용이합니다.
      */
 
     public List<String> getUniqueCategories() {
