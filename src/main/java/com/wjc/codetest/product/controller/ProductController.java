@@ -91,7 +91,7 @@ public class ProductController {
     public ResponseEntity<ProductListResponse> getProductListByCategory(
         @RequestParam(value = "category") String category,
         @RequestParam(value = "page") int page,
-        @RequestParam(value = "size") int size,
+        @RequestParam(value = "size") int size
     )
     로 get http method를 사용하면서 쿼리스트링을 이용해 요청하고 적당히 줄바꿈 하는 것이 좋을것 같습니다.
     - 선택 근거 :
@@ -109,10 +109,11 @@ public class ProductController {
 }
 /*
 - 문제 : 메서드에서 불필요한 변수를 사용해 코드 퀄리티 저하
-- 원인 : 불필요한 중간 저장
+- 원인 : getProductListByCategory를 제외하면 불필요한 중간 저장
 - 개선안 :
 단순 반환 시 return ResponseEntity.ok(service.method()) 형식으로 사용 하되,
-후처리 필요 시 변수에 담아 사용하면 좋을 것 같습니다.
+getProductListByCategory처럼 후처리가 필요할 때만 변수에 담아 사용하면 좋을 것 같습니다.
 - 선택 근거 :
-현재는 후처리 없이 사용하지 않는 변수에 담아져 있기 때문에 즉시 반환 하는 방법을 사용하는 것이 더 깔끔하다고 생각합니다.
+현재는 getProductListByCategory를 제외하면
+전부 사용하지 않는 변수에 담아져 있기 때문에 즉시 반환 하는 방법을 사용하는 것이 더 깔끔하다고 생각합니다.
  */
