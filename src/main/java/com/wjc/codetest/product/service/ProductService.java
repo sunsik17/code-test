@@ -69,6 +69,16 @@ public class ProductService {
         PageRequest pageRequest = PageRequest.of(dto.getPage(), dto.getSize(), Sort.by(Sort.Direction.ASC, "category"));
         return productRepository.findAllByCategory(dto.getCategory(), pageRequest);
     }
+    /*
+    -문제 : 성능 낭비
+    -원인 : findAllByCategory()는 이미 특정 카테고리의 상품들을 찾아 내지만 category로 정렬하는 효과 없는 정렬쿼리 발생
+    -개선안 :
+    pageRequest 객체를 생성할 때 Sort.by를 삭제하거나
+    클라이언트가 선택한 기준에 맞게 정렬해야 합니다.
+    -선택근거 :
+    개발자가 직접 코드로 category를 이용한 정렬을 진행하기 때문에
+    의미 없는 정렬 쿼리 ORDER BY 줄이 사라지거나 의미있게 정렬 할 수 있도록 바뀌게 됩니다.
+     */
 
     public List<String> getUniqueCategories() {
         return productRepository.findDistinctCategories();
