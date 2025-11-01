@@ -27,6 +27,13 @@ import java.util.List;
 - 개선안(대안) :
 @RequestMapping("/products") 로 베이스 경로를 통일 하고
 @GetMapping("/{productId}")과 같이 동사 대신 http메소드로 행동을 표현하도록 url을 수정해야 합니다.
+개선 후 예시
+GET    /products/{id}
+POST   /products
+PUT    /products/{id}
+DELETE /products/{id}
+GET    /products?category=전자제품&page=0&size=10
+GET    /products/categories
 
 - 선택 근거:
 RESTful api naming 컨벤션 준수로 API 직관성이 좋아집니다.
@@ -77,16 +84,21 @@ public class ProductController {
         return ResponseEntity.ok(new ProductListResponse(productList.getContent(), productList.getTotalPages(), productList.getTotalElements(), productList.getNumber()));
     }
     /*
-    - 문제 : http 메소드를 잘못 사용하고 있으며 코드 한줄의 길이가 너무 긴듯 합니다.
-    - 원인 : 조회 목적 api 입니다만 post 메소드 요청을 받고 있고, 화면을 벗어날 만큼 코드 길이가 깁니다.
+    - 문제 : http 메소드를 잘못 사용하고 있습니다. 또, 코드 한줄의 길이가 너무 긴듯 합니다.
+    - 원인 : 조회 목적 api 입니다만 post 메소드에 RequestBody를 통해 요청을 받고 있고, 화면을 벗어날 만큼 코드 길이가 깁니다.
     - 개선안 :
     @GetMapping
     public ResponseEntity<ProductListResponse> getProductListByCategory(
+        @RequestParam(value = "category") String category,
         @RequestParam(value = "page") int page,
         @RequestParam(value = "size") int size,
-        @RequestParam(value = "sort") String sort ) {
-        Page<Product> productList = productService.getListByCategory(dto);
-        return ResponseEntity.ok(new ProductListResponse(productList.getContent(), productList.getTotalPages(), productList.getTotalElements(), productList.getNumber()));
+    )
+    로 get http method를 사용하면서 쿼리스트링을 이용해 요청하고 적당히 줄바꿈 하는 것이 좋을것 같습니다.
+    - 선택 근거 :
+    코드가 너무길어지면 가독성이 안좋아지기 때문에 줄바꿈을 하는 것이 좋다고 생각합니다.
+    또, 단순 특정 카테고리의 상품들을 조회하는 api라고 보여집니다.
+    따라서 조회 조건이 너무 복잡한 경우도 아니고 노출되지 말아야할 민감한 정보가 아니라고 생각 돼 쿼리스트링과 get 메소드를 사용하는 것이
+    좋다고 생각합니다.
      */
 
     @GetMapping(value = "/product/category/list")
@@ -94,13 +106,13 @@ public class ProductController {
         List<String> uniqueCategories = productService.getUniqueCategories();
         return ResponseEntity.ok(uniqueCategories);
     }
-    /*
-    - 문제 : 메서드에서 불필요한 변수를 사용해 코드 퀄리티 저하
-    - 원인 : 불필요한 중간 저장
-    - 개선안 :
-    단순 반환 시 return ResponseEntity.ok(service.method()) 형식으로 사용 하되,
-    후처리 필요 시 변수에 담아 사용하면 좋을 것 같습니다.
-    - 선택 근거 :
-    현재는 후처리 없이 사용하지 않는 변수에 담아져 있기 때문에 즉시 반환 하는 방법을 사용하는 것이 더 깔끔하다고 생각합니다.
-     */
 }
+/*
+- 문제 : 메서드에서 불필요한 변수를 사용해 코드 퀄리티 저하
+- 원인 : 불필요한 중간 저장
+- 개선안 :
+단순 반환 시 return ResponseEntity.ok(service.method()) 형식으로 사용 하되,
+후처리 필요 시 변수에 담아 사용하면 좋을 것 같습니다.
+- 선택 근거 :
+현재는 후처리 없이 사용하지 않는 변수에 담아져 있기 때문에 즉시 반환 하는 방법을 사용하는 것이 더 깔끔하다고 생각합니다.
+ */
