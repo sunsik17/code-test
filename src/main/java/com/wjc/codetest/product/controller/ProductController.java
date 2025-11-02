@@ -108,7 +108,7 @@ public class ProductController {
     }
 }
 /*
-- 문제 1 : 메서드에서 불필요한 변수를 사용해 코드 퀄리티 저하
+- 문제 : 메서드에서 불필요한 변수를 사용해 코드 퀄리티 저하
 - 원인 : getProductListByCategory를 제외하면 불필요한 중간 저장
 - 개선안 :
 단순 반환 시 return ResponseEntity.ok(service.method()) 형식으로 사용 하되,
@@ -117,11 +117,16 @@ getProductListByCategory처럼 후처리가 필요할 때만 변수에 담아 �
 현재는 getProductListByCategory를 제외하면
 전부 사용하지 않는 변수에 담아져 있기 때문에 즉시 반환 하는 방법을 사용하는 것이 더 깔끔하다고 생각합니다.
 
-- 문제 2 : 클라이언트가 필요하지 않는 정보도 함께 제공 될 수 있습니다.
-- 원인 : entity를 직접 반환하고 있습니다.
+
+크리티컬한 문제 - controller entity 반환
+
+- 문제 : 클라이언트가 필요하지 않는 정보도 함께 제공 될 수 있고, entity간 양방향 관계 매핑시 순환 참조가 발생할 수 있습니다.
+- 원인 : entity를 직접 반환하고 있고, 특정 카테고리 상품목록 api 에서 new ProductListResponse(productList.getContent() 사용
 - 개선안 :
 Response에 필요한 property만 갖는 dto를 생성합니다.
 - 선택 근거 :
-현재는 product entity 내부에 property가 category와 name만 있지만 여러 민감한 정보가 생길 수 있습니다.
-어떠한 entity는 직접 반환에 사용되는 것이 아닌 비즈니스로직에 집중 되어야 하고 필요한 데이터는 dto를 통해 노출시켜야 합니다.
+현재는 product entity 내부에 property가 category와 name만 있지만 여러 민감한 정보가 생길 수 있으며, 사용자에게 설계를 노출 하게 됩니다.
+어떠한 entity도 직접 반환에 사용되는 것이 아닌 비즈니스로직에 집중 되어야 하고 필요한 데이터는 dto를 통해 노출시켜야 합니다.
+
+response에 맞는 속성을 지닌 dto를 생성해 dto, dto list를 반환 합니다.
  */
