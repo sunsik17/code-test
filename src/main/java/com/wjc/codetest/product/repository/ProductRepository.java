@@ -35,7 +35,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     cursor 기반            <->         offset 기반
     ui 제공 불가                        ui 제공 가능
     초기비용 발생                       구현 쉬움
-    요청마다 성능 무관                   뒤로갈수록 느려짐 (최적화 필요)
+    요청마다 성능 무관                   뒤 페이지 갈수록 느려짐 (최적화 필요)
      */
 
     @Query("SELECT DISTINCT p.category FROM Product p")
