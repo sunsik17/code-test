@@ -54,17 +54,38 @@ public class ProductService {
 
     }
     /*
-    - 문제 : 공백
+    - 문제 1: 공백
     - 원인 : return updateProduct; 아래 의미 없는 줄바꿈
     - 개선안 : 삭제
     - 선택 근거 :
     팀단위 프로젝트라면 팀 코드 컨벤션이 있을 것이고 해당 컨벤션을 지켜주어야 합니다.
     필요 없는 공백을 없애고 코드 컨벤션을 지키려는 습관을 들여야 합니다.
+
+    - 문제 2: 잘못된 코드 재사용, 불필요한 변수
+    - 원인 : 직접 repository를 이용하지 않고 같은 service class내에 있는 메소드 getProductById()를 재사용 중입니다.
+    - 개선안 :
+    같은 클래스의 getProductById()보다 직접 repository를 사용해 findById()를 사용하는 것이 좋습니다.
+    updatedProduct같이 사용하지 않는 변수는 삭제하여
+    return productRepository.save(product); 로 단순화 해주세요
+    - 선택 근거:
+    repository 직접 호출로 데이터 접근 로직이 명확해집니다.
+    중간 변수 제거로 코드 가독성 개선
     */
     public void deleteById(Long productId) {
         Product product = getProductById(productId);
         productRepository.delete(product);
     }
+    /*
+    - 문제 : 불필요한 내부 메소드 호출
+    - 원인 : getProductById()를 사용해 의미 있는 재사용처럼 보이지만, 해당 메소드는 실제로 아무 명시적인 기능이 없습니다.
+    - 개선안 :
+    repository.findById()를 이용해 의도한 에러메세지를 보여주고 delete()를 사용하거나
+    기능만을 위한 것이라면 repository.deleteById()를 이용해 예외처리를 맡기는 것이 나아 보입니다.
+    - 트레이드오프:
+    repository.deleteById()를 이용하면 코드 한줄로 조회 삭제 로직이 가능합니다만,
+    데이터를 찾지 못하면 EmptyResultDataAccessException이 고정으로 던져지게 되고
+    findById() + delete()를 이용하면 예외처리를 커스텀할 수 있다는 장점이 있습니다.
+     */
 
     public Page<Product> getListByCategory(GetProductListRequest dto) {
         PageRequest pageRequest = PageRequest.of(dto.getPage(), dto.getSize(), Sort.by(Sort.Direction.ASC, "category"));
