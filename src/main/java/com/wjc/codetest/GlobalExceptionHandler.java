@@ -43,6 +43,7 @@ public class CodeTestException extends RuntimeException {
 
 ErrorCode.java
 public enum ErrorCode {
+    INVALID_REQUEST(BAD_REQUEST, "잘못 된 요청"),
 	NOT_FOUND_PRODUCT(HttpStatus.NOT_FOUND, "상품을 찾을 수 없음");
 
 	private final HttpStatus httpStatus;
@@ -63,12 +64,23 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(e.getErrorCode().getHttpStatus())
 			.body(new ErrorResponse(errorCode, errorCode.getDescription()));
 	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
+		MethodArgumentNotValidException e) {
+		log.error("MethodArgumentNotValidException is occurred.", e);
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+			.body(new ErrorResponse(ErrorCode.INVALID_REQUEST, ErrorCode.INVALID_REQUEST.getDescription()));
+	}
+	.
+	.
 }
 -선택 근거 :
 예외를 구체화 하면 log로 남겨 확인하기 쉽고, 의미 있는 오류 메세지를 전달할 수 있습니다.
 ProductService.java 의 getProductById 에서
-throw new CodeTestException(ErrorCode.NOT_FOUND_PRODUCT); 처럼 사용하여
-보다 확실하고 빠르게 문제지점을 파악할 수 있습니다.
+throw new CodeTestException(ErrorCode.NOT_FOUND_PRODUCT); 처럼 사용하거나
+클라이언트가 잘못 된 요청을 했을 때 보다 확실하고 빠르게 문제지점을 파악할 수 있습니다.
 
 - 문제2 : GlobalExceptionHandler 가 특정 컨트롤러 패키지만 지정,
          가독성 문제
