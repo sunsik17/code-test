@@ -43,7 +43,7 @@ public class CodeTestException extends RuntimeException {
 
 ErrorCode.java
 public enum ErrorCode {
-	NOT_FOUND_PRODUCT(HttpStatus.BAD_REQUEST, "상품을 찾을 수 없음");
+	NOT_FOUND_PRODUCT(HttpStatus.NOT_FOUND, "상품을 찾을 수 없음");
 
 	private final HttpStatus httpStatus;
 	private final String description;
