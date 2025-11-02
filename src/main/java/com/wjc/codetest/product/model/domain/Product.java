@@ -30,6 +30,15 @@ public class Product {
 
     @Column(name = "category")
     private String category;
+    /*
+    -문제 : 사실상 category 종류가 무한으로 증식 가능, 중복 가능
+    -원인 : category type이 String 입니다.
+    -개선안 :
+    Category Entity를 만들어 관리하거나 Constants 패키지에 Enum 으로 만들어 관리할 수 있도록 합니다.
+    -선택 근거 :
+    product에서 category는 중요한 역할을 합니다.
+    category를 이용한 조회 등 여러 곳에서 사용할 속성이지만, 단순 문자열이라면 "전자제품", "전자 제품" 처럼 중복이 발생할 수 있습니다.
+     */
 
     @Column(name = "name")
     private String name;
